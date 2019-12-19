@@ -160,12 +160,7 @@ def count2fi(gtf, lib, length, anchor, sample_number, output, update):
                 if (intron_count_list[i * 6 + 8] != intron_count_list[i * 6 + 11] or intron_count_list[i * 6 + 10] !=
                     intron_count_list[i * 6 + 11]):
                     intron_clean[intron_count_list[0]][1] = "false"
-            #test
-            print(type(inc[i]))
-            print(type(skp[i]))
-            print(type(in_l))
-            #test
-            if ((inc[i] + skp[i]) > 0) & ((float(inc[i]) / in_l + float(skp[i]) / sk_l) > 0):
+            if ((float(inc[i]) / in_l + float(skp[i]) / sk_l) > 0):
                 PI_J[i] = str((float(inc[i]) / in_l) / (float(inc[i]) / in_l + float(skp[i]) / sk_l))
             else:
                 PI_J[i] = 'NA'
