@@ -99,5 +99,5 @@ def parse_args():
           gtfs, length, anchor, bam_files, count_out_dir, lib, read, thread, update)
     os.system(cmd)
 
-if __name__=="__main__":
+if __name__=='__main__':
     parse_args()
