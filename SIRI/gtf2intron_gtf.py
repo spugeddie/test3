@@ -1,4 +1,3 @@
-#!/bin/python
 import getopt
 import copy
 import re
