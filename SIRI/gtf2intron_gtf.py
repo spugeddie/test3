@@ -1,4 +1,4 @@
-#!/bin/python2
+#!/bin/python
 import getopt
 import copy
 import re
@@ -23,12 +23,12 @@ def intron_gtf(path, gtf_name):
     exon_s, exon_e = defaultdict(lambda: []), defaultdict(lambda: [])
     parse_line_start = 0
     gtf_file_list = read_file(path + '/' + gtf_name)
-    for i in xrange(0, len(gtf_file_list)):
+    for i in range(0, len(gtf_file_list)):
         if gtf_file_list[i].startswith('#') or gtf_file_list[i].split('\t')[2] != 'exon':
             continue
         parse_line_start = i
         break
-    for i in xrange(parse_line_start, len(gtf_file_list)):
+    for i in range(parse_line_start, len(gtf_file_list)):
         gtf_list = gtf_file_list[i].strip().split('\t')
         if gtf_list[2] != 'exon':
             continue
@@ -37,7 +37,7 @@ def intron_gtf(path, gtf_name):
         exon_e[transcript_id].append(int(gtf_list[4]))
     trans = {}
     fw = open(("%s/Intron_%s" % (path, gtf_name)), "w")
-    for i in xrange(parse_line_start, len(gtf_file_list)):
+    for i in range(parse_line_start, len(gtf_file_list)):
         gtf_list = gtf_file_list[i].strip().split('\t')
         transcript_id = re.sub('.*transcript_id "|\".*', '', gtf_list[8])
         gene_id = re.sub('.*gene_id "|\".*', '', gtf_list[8])
@@ -47,7 +47,7 @@ def intron_gtf(path, gtf_name):
         elif len(exon_s[transcript_id]) > 1:
             exon_s[transcript_id].sort()
             exon_e[transcript_id].sort()
-            for i in xrange(1, len(exon_s[transcript_id])):
+            for i in range(1, len(exon_s[transcript_id])):
                 if gtf_list[6] == '+':
                     fw.write(
                         "%s\t%s\tintron\t%s\t%s\t.\t%s\t.\tgene_id \"%s\"; gene_name \"%s\"; transcript_id \"%s\"; intron_number \"%s\"; total_intron_number \"%s\"; exon_1 \"%s_%s\"; exon_2 \"%s_%s\";\n" % (
@@ -99,7 +99,7 @@ def annotated_intron(path, gtf_name, gtf_file_list):
         intron[key] = ["false", gtf_list[0], gtf_list[3], gtf_list[4], gene_id, gtf_list[6]]
         index_s = exon1 / bin
         index_e = exon2 / bin
-        for i in xrange(index_s, index_e + 1):
+        for i in range(index_s, index_e + 1):
             pos[(gtf_list[0], gtf_list[6], i)].append(key)
     exon_file = open("%s/Exon_%s" % (path, gtf_name))
     for line in exon_file:
@@ -146,10 +146,10 @@ def attribute_intron(path, gtf_name, strand, gtf_file_list, bin = 1000):
         index_s = int(gtf_list[3]) / bin
         index_e = int(gtf_list[4]) / bin
         if strand == 'unstrand':
-            for i in xrange(index_s, index_e + 1):
+            for i in range(index_s, index_e + 1):
                 pos[(gtf_list[0], 'unstrand', i)].append(key)
         else:
-            for i in xrange(index_s, index_e + 1):
+            for i in range(index_s, index_e + 1):
                 pos[(gtf_list[0], gtf_list[6], i)].append(key)
 
     exon_file = open("%s/Exon_%s" % (path, gtf_name))
@@ -203,27 +203,27 @@ def parse_args():
         elif opt in '--strand':
             strand = arg
     if not gtf:
-        print "Not enough parameters!"
-        print "Program : ", sys.argv[0]
-        print "A python program to get the clean intron  from given intron gtf file."
-        print "Usage :", sys.argv[0], " --gtf: The gtf file;"
-        print "Usage :", sys.argv[0], " --strand: The library type."
-        print datetime.datetime.now()
+        print("Not enough parameters!")
+        print("Program : ", sys.argv[0])
+        print("A python program to get the clean intron  from given intron gtf file.")
+        print("Usage :", sys.argv[0], " --gtf: The gtf file;")
+        print("Usage :", sys.argv[0], " --strand: The library type.")
+        print(datetime.datetime.now())
         sys.exit()
 
     path, gtf_name = os.path.split(gtf)
     if path == '':
         path = '.'
-    print '...generating exon gtf files'
+    print('...generating exon gtf files')
     exon_gtf(path, gtf_name)
-    print '...generating intron gtf files'
+    print('...generating intron gtf files')
     intron_gtf(path, gtf_name)
     gtf_file_list = read_file("%s/Intron_%s" % (path, gtf_name))
-    print '...generating transcript files'
+    print('...generating transcript files')
     transcript_intron(path, strand, gtf_file_list)
-    print '...generating intron annotation files'
+    print('...generating intron annotation files')
     annotated_intron(path, gtf_name, gtf_file_list)
-    print '...generating intron attributes files'
+    print('...generating intron attributes files')
     attribute_intron(path, gtf_name, strand, gtf_file_list)
 
 if __name__=="__main__":
