@@ -97,16 +97,16 @@ def annotated_intron(path, gtf_name, gtf_file_list):
         exon2 = int(re.sub('.*exon_2 "|\".*', '', gtf_list[8]).split("_")[1])
         key = "%s_%s_%s_%s_%s" % (gtf_list[0], gtf_list[3], gtf_list[4], gene_id, gtf_list[6])
         intron[key] = ["false", gtf_list[0], gtf_list[3], gtf_list[4], gene_id, gtf_list[6]]
-        index_s = exon1 / bin
-        index_e = exon2 / bin
+        index_s = int(exon1 / bin)
+        index_e = int(exon2 / bin)
         for i in range(index_s, index_e + 1):
             pos[(gtf_list[0], gtf_list[6], i)].append(key)
     exon_file = open("%s/Exon_%s" % (path, gtf_name))
     for line in exon_file:
         sp = line.strip().split('\t')
         gene_id = re.sub('.*gene_id "|\".*', '', sp[8])
-        index_s = int(sp[3]) / bin
-        index_e = int(sp[4]) / bin
+        index_s = int(int(sp[3]) / bin)
+        index_e = int(int(sp[4]) / bin)
         for i in range(index_s, index_e + 1):
             if (sp[0], sp[6], i) in pos:
                 for j in pos[sp[0], sp[6], i]:
@@ -143,8 +143,8 @@ def attribute_intron(path, gtf_name, strand, gtf_file_list, bin = 1000):
                 intron[key][5] += gene_id
         else:
             intron[key] = ['true', 'true', gtf_list[0], int(gtf_list[3]), int(gtf_list[4]), gene_id]
-        index_s = int(gtf_list[3]) / bin
-        index_e = int(gtf_list[4]) / bin
+        index_s = int(int(gtf_list[3]) / bin)
+        index_e = int(int(gtf_list[4]) / bin)
         if strand == 'unstrand':
             for i in range(index_s, index_e + 1):
                 pos[(gtf_list[0], 'unstrand', i)].append(key)
@@ -155,8 +155,8 @@ def attribute_intron(path, gtf_name, strand, gtf_file_list, bin = 1000):
     exon_file = open("%s/Exon_%s" % (path, gtf_name))
     for line in exon_file:
         sp = line.strip().split("\t")
-        index_s = int(sp[3]) / bin
-        index_e = int(sp[4]) / bin
+        index_s = int(int(sp[3]) / bin)
+        index_e = int(int(sp[4]) / bin)
         exon_strand = sp[6]
         if strand == "unstrand":
             exon_strand = "unstrand"
@@ -171,8 +171,8 @@ def attribute_intron(path, gtf_name, strand, gtf_file_list, bin = 1000):
 
     for line in gtf_file_list:
         sp = line.strip().split('\t')
-        index_s = int(sp[3]) / bin
-        index_e = int(sp[4]) / bin
+        index_s = int(int(sp[3]) / bin)
+        index_e = int(int(sp[4]) / bin)
         intron_strand = sp[6]
         if (strand == "unstrand"):
             intron_strand = "unstrand"
