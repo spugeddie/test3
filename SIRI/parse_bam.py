@@ -41,8 +41,8 @@ def get_read_dictionary(gtf_file, lib, bin_size=1000):
             dict_intron_left[(sp[0], int(sp[3]))].append(key)
             dict_intron_right[(sp[0], int(sp[4]))].append(key)
             dict_intron_left_right[(sp[0], int(sp[3]), int(sp[4]))].append(key)
-            index_start = int(sp[3]) / bin_size
-            index_end = int(sp[4]) / bin_size
+            index_start = int(int(sp[3]) / bin_size)
+            index_end = int(int(sp[4]) / bin_size)
             for i in range(index_start, index_end + 1):
                 dict_intron_window[(sp[0], i)].append(key)
     return dict_count, dict_intron_left, dict_intron_right, dict_intron_left_right, dict_intron_window
@@ -102,8 +102,8 @@ def get_exon_gene_dictionary(gtf_file, bin_size=1000):
     for gene in dict_gene2exon:
         for exon_pos in dict_gene2exon[gene]:
             dict_exon2gene[(dict_gene_count[gene][2], exon_pos[0], exon_pos[1])] = gene
-            index_start = exon_pos[0] / bin_size
-            index_end = exon_pos[1] / bin_size
+            index_start = int(exon_pos[0] / bin_size)
+            index_end = int(exon_pos[1] / bin_size)
             for i in range(index_start, index_end + 1):
                 dict_gene_count_windows[(dict_gene_count[gene][2], i)].append(
                     (dict_gene_count[gene][2], exon_pos[0], exon_pos[1]))
