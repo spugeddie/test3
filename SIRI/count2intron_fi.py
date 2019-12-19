@@ -1,4 +1,4 @@
-#!/bin/python2
+#!/bin/python
 import getopt
 import copy
 import re
@@ -57,7 +57,7 @@ def bam2count(output, gtf, bam_files, read, lib, length, anchor, thread, bin_siz
     bam_files = bam_files.split(',')
     sample_number = len(bam_files)
     run_cmd_list = []
-    for sample_index in xrange(0, sample_number):
+    for sample_index in range(0, sample_number):
         bam = bam_files[sample_index]
         if bam.endswith('.bam') or bam.endswith('.sam'):
             cmd = 'python {}/parse_bam.py --gtf {} --length {} --anchor {} --bam {} -o {}/count_{} --lib {} --read {} --Total {}/Total_{}.txt'.format(
@@ -71,11 +71,11 @@ def bam2count(output, gtf, bam_files, read, lib, length, anchor, thread, bin_siz
         pool.join()
 
     intron_header = dict()
-    for sample_index in xrange(0, sample_number):
+    for sample_index in range(0, sample_number):
         fp = open("%s/count_%s_intron.txt" % (output, sample_index))
         for info in fp:
             sp = info.strip().split("\t")
-            if (intron_header.has_key(sp[0])):
+            if (sp[0] in intron_header):
                 t = sp[3].split(",")
                 if (t[0] == "false"):
                     intron_header[sp[0]][2] = re.sub("true,", "false,", intron_header[sp[0]][2])
@@ -103,7 +103,7 @@ def bam2count(output, gtf, bam_files, read, lib, length, anchor, thread, bin_siz
     cmd2 = "paste %s/intron_header " % output
     cmd3 = "paste %s/exon_header " % output
 
-    for sample_index in xrange(0, sample_number):
+    for sample_index in range(0, sample_number):
         cmd = "cut -f 8,9,10,11,12,13 %s/count_%s_intron.txt > %s/intron_%s.val" % (output, sample_index, output, sample_index)
         os.system(cmd)
         cmd = "cut -f 2 %s/count_%s_exon.txt > %s/exon_%s.val" % (output, sample_index, output, sample_index)
@@ -221,24 +221,24 @@ def parse_args():
             update = arg
 
     if not gtf or not read or not bam_files or not output or not length or not anchor:
-        print "Not enough parameters!"
-        print "Program : ", sys.argv[0]
-        print "A python program to count the reads for retained intron events for varities of junction from a series of bam file."
-        print "Usage :", sys.argv[0], " --gtf: the intron gtf file and gtf file seperated by comma;"
-        print "Usage :", sys.argv[0], " --length:the length of reads;"
-        print "Usage :", sys.argv[0], " --anchor:the anchor length of the read;"
-        print "Usage :", sys.argv[0], " --bam_files: the bam file,multiple bam file seperated by commas;"
-        print "Usage :", sys.argv[0], " --lib: the library type;"
-        print "Usage :", sys.argv[0], " --read: The sequencing strategy of producing reads with choices of P/S;"
-        print "Usage :", sys.argv[0], ' --output: intron_id, gene_id,strand,chr,start,end,5SS inclusion counts,5SS skipping counts, 3SS includion counts,3SS skipping counts,skipping counts,intron counts;'
-        print "Usage :", sys.argv[0], " --thread: the thread to get bam reads counts."
-        print 'Usage :', sys.argv[0], " --update: update intron attributes based on data"
-        print datetime.datetime.now()
+        print("Not enough parameters!")
+        print("Program : ", sys.argv[0])
+        print("A python program to count the reads for retained intron events for varities of junction from a series of bam file.")
+        print("Usage :", sys.argv[0], " --gtf: the intron gtf file and gtf file seperated by comma;")
+        print("Usage :", sys.argv[0], " --length:the length of reads;")
+        print("Usage :", sys.argv[0], " --anchor:the anchor length of the read;")
+        print("Usage :", sys.argv[0], " --bam_files: the bam file,multiple bam file seperated by commas;")
+        print("Usage :", sys.argv[0], " --lib: the library type;")
+        print("Usage :", sys.argv[0], " --read: The sequencing strategy of producing reads with choices of P/S;")
+        print("Usage :", sys.argv[0], ' --output: intron_id, gene_id,strand,chr,start,end,5SS inclusion counts,5SS skipping counts, 3SS includion counts,3SS skipping counts,skipping counts,intron counts;')
+        print("Usage :", sys.argv[0], " --thread: the thread to get bam reads counts.")
+        print('Usage :', sys.argv[0], " --update: update intron attributes based on data")
+        print(datetime.datetime.now())
         sys.exit()
 
-    print 'parsing bam files...'
+    print('parsing bam files...')
     sample_number = bam2count(output, gtf, bam_files, read, lib, length, anchor, thread, bin_size=1000)
-    print 'converting counts to PI'
+    print('converting counts to PI')
     count2fi(gtf, lib, length, anchor, sample_number, output, update)
 
 if __name__ == "__main__":
