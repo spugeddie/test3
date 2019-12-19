@@ -226,5 +226,5 @@ def parse_args():
     print('...generating intron attributes files')
     attribute_intron(path, gtf_name, strand, gtf_file_list)
 
-if __name__=="__main__":
+if __name__=='__main__':
     parse_args()
