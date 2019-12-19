@@ -241,5 +241,5 @@ def parse_args():
     print('converting counts to PI')
     count2fi(gtf, lib, length, anchor, sample_number, output, update)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parse_args()
