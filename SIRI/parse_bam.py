@@ -359,5 +359,5 @@ def parse_args():
             
     parse_bam_file(Total, output, gtf, bam, read, lib, length, anchor, bin_size=1000)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parse_args()
